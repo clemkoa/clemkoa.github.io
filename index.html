@@ -1,27 +1,35 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>jQuery Projects</title>
-    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css ">
-</head>
-<body>
- 
-<div id="projects">
-    <h3>Sw4gg</h3>
-    <p>AAAAA</p>
-    <h3>SW4GGER</h3>
-    <p>BBBBB</p>
-</div>
- 
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
-<script>
-    $( "#projects" ).accordion();
-</script>
- 
-</body>
+	<head>
+	    <meta charset="utf-8">
+	    <title>jQuery Projects</title>
+	    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
+	    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="container">
+			<div id="projects">
+			    <h3>Time of your life you'll never get back:</h3>
+			    <p id="timerDisplay"></p>
+			    <h3>Sw4gg</h3>
+			    <p>AAAAA</p>
+			    <h3>SW4GGER</h3>
+			    <p>BBBBB</p>
+			</div>
+		</div> 
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script>
+	    $( "#projects" ).accordion();
+	    var timeSpent = 0;
+	    var myVar = setInterval(function () {myTimer()}, 1000);
+		function myTimer() {
+			timeSpent++;
+			$( "#timerDisplay" ).text(timeSpent + " seconds");
+		    
+		}
+	</script>
+	 
+	</body>
 </html>
-
-<!-- bower:js -->
-<!-- endbower -->
