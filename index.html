@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 	<head>
 	    <meta charset="utf-8">
 	    <title>Clemkoa</title>
@@ -10,7 +10,9 @@
 		<div class="container">
 			<div id="projects">
 			    <h3>Time of your life you'll never get back:</h3>
-			    <p id="timerDisplay"></p>
+			    <div ng-controller="refresh_control">
+			      {{message}}
+			    </div>
 			    <h3>Sw4gg</h3>
 			    <p>AAAAA</p>
 			    <h3>SW4GGER</h3>
@@ -20,15 +22,28 @@
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script>
-	    $( "#projects" ).accordion();
-	    var timeSpent = 0;
+	<script src="bower_components/angular/angular.min.js"></script>
+    <script>
+    $( "#projects" ).accordion();
+/*	    var timeSpent = 0;
 	    var myVar = setInterval(function () {myTimer()}, 1000);
 		function myTimer() {
 			timeSpent++;
 			$( "#timerDisplay" ).text(timeSpent + " seconds");
 		    
 		}
+*/	</script>
+
+	<script>
+		var app=angular.module('myApp',[])
+		.controller('refresh_control',function($scope,$interval){
+			var c=0;
+			$scope.message=c + " seconds";
+			$interval(function(){
+				$scope.message=c + " seconds";
+				c++;
+			},1000);
+		});
 	</script>
 	 
 	</body>
