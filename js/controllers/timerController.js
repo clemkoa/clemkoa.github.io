@@ -1,5 +1,5 @@
-var app = angular.module('myApp',[])
-.controller('refreshControl',function($scope, $interval) {
+var app = angular.module('myApp',[]);
+app.controller('refreshControl',function($scope, $interval) {
 	var c = $scope.startingTime || 0;
 	$scope.time = c;
 	$interval(function() {
