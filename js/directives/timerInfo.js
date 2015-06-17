@@ -5,6 +5,6 @@ app.directive('timerInfo', function() {
     	startingTime: '=' 
     }, 
     template: '<p> {{ time }} </p>',
-    controller: 'refresh_control'
+    controller: 'refreshControl'
   }
 });
