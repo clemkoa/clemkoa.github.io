@@ -6,5 +6,4 @@ var app = angular.module('myApp',[])
 		$scope.time = c;
 		c++;
 	}, 1000);
-    }
-);
+});
