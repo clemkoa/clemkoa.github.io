@@ -1,6 +1,6 @@
-var routerApp = angular.module('routerApp', ['ui.router'])
+var routerApp = angular.module('routerApp', ['ui.router']);
 
-.config(function($stateProvider, $urlRouterProvider) {
+routerApp.config(function($stateProvider, $urlRouterProvider) {
   //
   // For any unmatched url, redirect to /state1
   $urlRouterProvider.otherwise("/state1");
