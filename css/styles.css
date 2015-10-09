@@ -4,10 +4,12 @@
 }
 
 html, body {
-  font-family: sanFransiscoThin, Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
   font-size: 1.3em;
+  font-weight: 100;
   padding: 0;
   margin: 0;
+  background-color: #F2F1EF;
 }
 
 .homepage {
@@ -42,16 +44,58 @@ html, body {
 }
 
 .presentation {
+  background-color: #F2F1EF;
   position: relative;
   z-index: 3;
-  height:1000px;
   margin-top: 150px;
 }
 
 .presentation-wrapper {
   border-left: 1px solid grey;
+  padding: 15px;
 }
 
 .profile-photo {
+  padding: 0;
   border-radius: 1000px;
+}
+
+.projects {
+  margin-top: 100px;
+  background-color: rgb(250,250,250);
+  padding-top: 100px;
+  position: relative;
+  z-index: 3;
+}
+
+.project {
+  background-color: rgb(20,30,40);
+  color:white;
+  border-radius: 3px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.project-wrapper, .photo-project {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.project-title {
+    color: orange;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.project-description {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.project i {
+  color:orange;
+}
+
+.project a {
+  color:orange;
 }
