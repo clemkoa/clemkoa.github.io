@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "homepage": "https://github.com/clemkoa/clemkoa.github.io",
   "authors": [
-    "Clemkoa <Clemkoa>"
+    "Clement Joudet <clement.joudet@wanadoo.fr>"
   ],
-  "main": "index.html",
+  "description": "",
+  "main": "",
+  "moduleType": [],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -15,7 +17,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.1",
-    "jquery-ui": "~1.11.4"
+    "bootstrap": "~3.3.5"
   }
 }
