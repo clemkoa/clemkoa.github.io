@@ -69,16 +69,12 @@ html, body {
 }
 
 .project {
-  background-color: rgb(20,30,40);
-  color:white;
   border-radius: 3px;
   padding-top: 20px;
   padding-bottom: 20px;
-}
-
-.project-wrapper, .photo-project {
   margin-top: 30px;
   margin-bottom: 30px;
+  border: 1px solid rgba(0,0,0,.25);
 }
 
 .project-title {
@@ -95,6 +91,10 @@ html, body {
 .project i {
   color:orange;
 }
+/*
+.project img {
+  margin-top: 50px;
+}*/
 
 .project a {
   color:orange;
