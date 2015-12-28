@@ -100,3 +100,14 @@ html, body {
 .project a {
   color:orange;
 }
+
+.education {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.education-unit {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid grey;
+}
