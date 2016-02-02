@@ -1,11 +1,12 @@
-@font-face {
-    font-family: sanFransiscoThin;
-    src: url('fonts/YosemiteSanFranciscoFont-master/System-San-Francisco-Display-Thin.ttf');
-}
+/*#e77673
+#34c8bc
+#06495b
+#f7f9fa
+#cc4a4a*/
 
 html, body {
   font-family: Helvetica, sans-serif;
-  font-size: 1.3em;
+  font-size: 1.1em;
   font-weight: 100;
   padding: 0;
   margin: 0;
@@ -18,10 +19,10 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: -webkit-linear-gradient(#1C2E40, #101010); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#1C2E40, #101010); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#1C2E40, #101010); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#1C2E40, #101010); /* Standard syntax */
+    background: -webkit-linear-gradient(#cc4a4a, #06495b);
+    background: -o-linear-gradient(#cc4a4a, #06495b);
+    background: -moz-linear-gradient(#cc4a4a, #06495b);
+    background: linear-gradient(#cc4a4a, #06495b);
     background-size: cover;
     color: white;
 }
@@ -104,10 +105,18 @@ html, body {
 .education {
   padding-top: 30px;
   padding-bottom: 30px;
+  /*background-color: #f7f9fa;*/
+}
+
+.education h1 {
+
 }
 
 .education-unit {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid grey;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.year {
+  text-align: right;
 }
