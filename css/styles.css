@@ -153,3 +153,15 @@ li {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+@media only screen and (max-width: 750px) {
+  html, body{
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 970px) {
+  html, body{
+    font-size: 14px;
+  }
+}
