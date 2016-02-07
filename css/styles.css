@@ -63,7 +63,7 @@ html, body {
 
 .projects {
   margin-top: 100px;
-  background-color: #f5fafa;
+  background-color: #f7fcfc;
   padding-top: 100px;
   position: relative;
   z-index: 3;
@@ -135,4 +135,21 @@ html, body {
 
 .gap {
   margin-bottom: 0px;
+}
+
+.contact {
+  margin-top: 100px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-left: 20px;
+  border-left: 1px solid black;
+}
+
+li {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
