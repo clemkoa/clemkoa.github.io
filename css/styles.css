@@ -165,3 +165,22 @@ li {
     font-size: 14px;
   }
 }
+
+.contact-link-wrapper {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.contact-link {
+  color: white;
+  padding: 5px;
+  border-bottom: 2px solid white;
+  transition-duration: 0.5s;
+}
+
+.contact-link:hover {
+  text-decoration: none;
+  color:white;
+  border-bottom: 2px solid #25d554;
+  transition-duration: 0.5s;
+}
