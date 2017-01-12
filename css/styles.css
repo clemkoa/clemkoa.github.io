@@ -48,7 +48,8 @@ html, body {
   background-color: #F2F1EF;
   position: relative;
   z-index: 3;
-  margin-top: 150px;
+  padding-top: 150px;
+  padding-bottom: 100px;
 }
 
 .presentation-wrapper {
@@ -62,22 +63,11 @@ html, body {
 }
 
 .projects {
-  margin-top: 100px;
   background-color: #f7fcfc;
   padding-top: 100px;
   position: relative;
   z-index: 3;
 }
-
-/*.project {
-  border-radius: 3px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  border: 1px solid rgba(0,0,0,.25);
-  background-color: #FFF;
-}*/
 
 .project-title {
     color: orange;
@@ -106,10 +96,8 @@ html, body {
   padding-top: 30px;
   padding-bottom: 30px;
   background-color: #f7f9fa;
-}
-
-.education h1 {
-
+  position: relative;
+  z-index: 4;
 }
 
 .education-unit {
@@ -189,8 +177,4 @@ li {
   padding: 50px;
   border-radius: 5px;
   border: 2px solid #25d554;
-}
-
-.education {
-  z-index: 20;
 }
