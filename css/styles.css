@@ -82,7 +82,6 @@ html, body {
 }
 
 .project-title {
-    color: orange;
     margin-top: 30px;
     margin-bottom: 30px;
 }
@@ -91,14 +90,6 @@ html, body {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-
-.project i {
-  color:orange;
-}
-/*
-.project img {
-  margin-top: 50px;
-}*/
 
 .project a {
   color:orange;
