@@ -20,19 +20,19 @@ html, body {
     height: 100%;
     overflow: hidden;
     background-image: linear-gradient(0deg,#34C8D0, transparent),
-      linear-gradient(90deg, #CC4A54, transparent),
+      linear-gradient(90deg, #8c63d7, transparent),
       linear-gradient(180deg, #064958, transparent),
       linear-gradient(270deg, #E03BDB, transparent);
     background-image: -o-linear-gradient(0deg,#34C8D0, transparent),
-      -o-linear-gradient(90deg, #CC4A54, transparent),
+      -o-linear-gradient(90deg, #8c63d7, transparent),
       -o-linear-gradient(180deg, #064958, transparent),
       -o-linear-gradient(270deg, #E03BDB, transparent);
     background-image: -webkit-linear-gradient(0deg,#34C8D0, transparent),
-      -webkit-linear-gradient(90deg, #CC4A54, transparent),
+      -webkit-linear-gradient(90deg, #8c63d7, transparent),
       -webkit-linear-gradient(180deg, #064958, transparent),
       -webkit-linear-gradient(270deg, #E03BDB, transparent);
     background-image: -moz-linear-gradient(0deg,#34C8D0, transparent),
-      -moz-linear-gradient(90deg, #CC4A54, transparent),
+      -moz-linear-gradient(90deg, #8c63d7, transparent),
       -moz-linear-gradient(180deg, #064958, transparent),
       -moz-linear-gradient(270deg, #E03BDB, transparent);
     background-size: cover;
