@@ -1,4 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-05-21T18:48:05+10:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Clement Joudet - blog</title><subtitle>Personal blog about machine learning, software and tech.</subtitle><entry><title type="html">Improving deep learning object detection on dental x-rays</title><link href="http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray.html" rel="alternate" type="text/html" title="Improving deep learning object detection on dental x-rays" /><published>2018-09-06T00:00:00+10:00</published><updated>2018-09-06T00:00:00+10:00</updated><id>http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray</id><content type="html" xml:base="http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray.html">&lt;p&gt;This is a follow-up on how I improved the model from my previous post.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-05-21T22:56:24+10:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Clement Joudet - blog</title><subtitle>Personal blog about machine learning, software and tech.</subtitle><entry><title type="html">Neural network implementation principles</title><link href="http://localhost:4000/dental/2019/08/18/neural-network-implementation-principles.html" rel="alternate" type="text/html" title="Neural network implementation principles" /><published>2019-08-18T00:00:00+10:00</published><updated>2019-08-18T00:00:00+10:00</updated><id>http://localhost:4000/dental/2019/08/18/neural-network-implementation-principles</id><content type="html" xml:base="http://localhost:4000/dental/2019/08/18/neural-network-implementation-principles.html">&lt;p&gt;It’s easy to get lost or discouraged while implementing a neural net, especially from state-of-the-art papers. These models are complex, and I found myself stuck many times while trying to train one of them. Over time, I developed a few principles that help me implement neural net better and faster.&lt;/p&gt;
+
+&lt;p&gt;The type of task this post addresses is not fine-tuning a deep learning model to gain a few 0.1%, or build a production-ready end-to-end pipeline. It is more about trying to replicate a paper’s results, based on a blurry definition of the model architecture.&lt;/p&gt;
+
+&lt;p&gt;Andrej Karpathy released an incredibly nice recipe for NN implementation a few months ago: &lt;a href=&quot;https://karpathy.github.io/2019/04/25/recipe/&quot;&gt;https://karpathy.github.io/2019/04/25/recipe/&lt;/a&gt;. While his post is very thorough, I thought I would add a few big-picture principles and specify where my “recipe” differs from his.&lt;/p&gt;
+
+&lt;h2 id=&quot;principle-1-reduce-complexity&quot;&gt;Principle 1. Reduce complexity.&lt;/h2&gt;
+
+&lt;p&gt;This seems very simple and obvious. And it’s what we’re all trying to do every time right? Well, it’s easier if you have a checklist to follow, one thing at a time. The goal here is to actively isolate problems and reduce complexity.&lt;/p&gt;
+
+&lt;p&gt;When it comes to implementing neural nets, here is my usual checklist:&lt;/p&gt;
+
+&lt;h4 id=&quot;1-focus-on-forward-pass-first&quot;&gt;1. Focus on forward pass first&lt;/h4&gt;
+
+&lt;p&gt;This will help define the architecture and layers, and having a clear idea of the output of the neural network. Some papers can seem blurry about the model architecture, and I believe starting with the forward pass helps setting a proper foundation for the implementation. You will have a clearer view of what the net does, and how the training works.&lt;/p&gt;
+
+&lt;p&gt;I also find that forcing myself to write an architecture skeleton raises some important questions early. It really helps understand the key points of the paper.
+No need to get lost building the whole data pipeline when you don’t have a clear vision of the model.&lt;/p&gt;
+
+&lt;h4 id=&quot;2-train-by-overfitting&quot;&gt;2. Train by overfitting&lt;/h4&gt;
+
+&lt;p&gt;Now you’re ready for back-propagation. While training, error sources are plenty: you can have issues in your dataset, your loss, or any mathematical operation you perform. You can have wrong parameters or initialisation that will prevent the network from learning properly. In order to reduce complexity, it’s important to focus on one thing at time. My plan is usually the following:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Start with only 1 sample that you selected. If the training doesn’t converge, you have big issues. Validate the NN output on the same sample as the training one. This way your training set is also your evaluation set, and you can focus on initialisation and meta-parameters.&lt;/li&gt;
+  &lt;li&gt;Train with ~10 samples&lt;/li&gt;
+  &lt;li&gt;Train on whole dataset&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;By starting with only one sample, you reduce complexity coming from the dataset and the data pipeline. Overfitting on one sample will make you focus on the loss definition, back-propagation and initialisation. As soon as training converges on 1 sample, try with a dozen samples. This will introduce a bit of variety in the data distribution, as well as a stronger data pipeline. When the model works on a small subset, you can extend to the whole dataset and focus on the data pipeline aspect.&lt;/p&gt;
+
+&lt;h4 id=&quot;3-initialisation-is-key&quot;&gt;3. Initialisation is key&lt;/h4&gt;
+
+&lt;p&gt;Now that your network is able to train on the whole dataset and you can see the loss going down, it’s time to help the learning process.
+Sometimes the loss will be stuck around a specific value, and it feels like the network is not able to go past it.
+Having a proper look at your network initialisation can save you a lot of time. Wrong initialisation values, too big or too small, can set you back for a while.
+I recommend you have a go at &lt;a href=&quot;https://www.deeplearning.ai/ai-notes/initialization/&quot;&gt;https://www.deeplearning.ai/ai-notes/initialization/&lt;/a&gt; for a
+very interesting playground.&lt;/p&gt;
+
+&lt;h2 id=&quot;principle-2-reduce-the-potential-error-sources&quot;&gt;Principle 2. Reduce the potential error sources.&lt;/h2&gt;
+
+&lt;h4 id=&quot;mind-your-transformations&quot;&gt;Mind your transformations&lt;/h4&gt;
+
+&lt;p&gt;You should be wary of tensor reshaping. It is easy to use a &lt;code class=&quot;highlighter-rouge&quot;&gt;reshape&lt;/code&gt; instead of a &lt;code class=&quot;highlighter-rouge&quot;&gt;permute&lt;/code&gt;, and your network won’t be able to train properly because you mixed up your data across dimensions. In general, you should be careful about any tensor reshaping!&lt;/p&gt;
+
+&lt;h4 id=&quot;know-you-dataset&quot;&gt;Know you dataset&lt;/h4&gt;
+
+&lt;p&gt;As Andrej Karpathy says, you need to become one with the data in order to understand what you are doing.&lt;/p&gt;
+
+&lt;h4 id=&quot;visualize-everything&quot;&gt;Visualize everything&lt;/h4&gt;
+
+&lt;p&gt;You need to visualize inputs, outputs, training loss, middle layers and any variable that is important to your model. Tensorboard is great for this.&lt;/p&gt;
+
+&lt;h4 id=&quot;test-everything&quot;&gt;Test everything&lt;/h4&gt;
+
+&lt;p&gt;NNs rely on mathematical functions and it’s easy to make a mistake / typo in big numpy one-liners. Testing everything will ensure:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You have separated your code in dedicated and unitary functions&lt;/li&gt;
+  &lt;li&gt;Your functions do exactly what you want.&lt;/li&gt;
+  &lt;li&gt;You have more confidence in your code and can debug easier&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In python, pytest is great for testing.&lt;/p&gt;
+
+&lt;h4 id=&quot;reproducibility-matters&quot;&gt;Reproducibility matters&lt;/h4&gt;
+
+&lt;p&gt;Vanishing gradient is one of the problems for which it’s nice to reproduce the issue.
+Setting the random seed is a mandatory step for any model implementation: run it twice, get the same results.&lt;/p&gt;
+
+&lt;h4 id=&quot;start-with-code-readability-instead-of-optimisation&quot;&gt;Start with code readability instead of optimisation&lt;/h4&gt;
+
+&lt;p&gt;You will gain time having a slower but easier to debug model at first. Once your model trains perfectly, you can spend some time on optimising every step.&lt;/p&gt;
+
+&lt;h2 id=&quot;principle-3-most-of-the-intelligence-is-in-the-definition-of-the-loss&quot;&gt;Principle 3. Most of the intelligence is in the definition of the loss.&lt;/h2&gt;
+
+&lt;p&gt;The training loss and back-propagation are often the most complex steps in the implementation, because it’s where most of the intelligence comes from. It’s worth spending some time on your loss definition!&lt;/p&gt;
+
+&lt;p&gt;Hope you find these simple principles useful for your future implementations.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;Edited on 2020-05-21&lt;/p&gt;</content><author><name></name></author><summary type="html">It’s easy to get lost or discouraged while implementing a neural net, especially from state-of-the-art papers. These models are complex, and I found myself stuck many times while trying to train one of them. Over time, I developed a few principles that help me implement neural net better and faster.</summary></entry><entry><title type="html">Improving deep learning object detection on dental x-rays</title><link href="http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray.html" rel="alternate" type="text/html" title="Improving deep learning object detection on dental x-rays" /><published>2018-09-06T00:00:00+10:00</published><updated>2018-09-06T00:00:00+10:00</updated><id>http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray</id><content type="html" xml:base="http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray.html">&lt;p&gt;This is a follow-up on how I improved the model from my previous post.&lt;/p&gt;
 
 &lt;p&gt;What was wrong:&lt;/p&gt;
 
