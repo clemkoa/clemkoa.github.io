@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Deep learning object detection on dental x-rays"
-date:   2018-06-10 18:39:56 +1000
+title: "Deep learning object detection on dental x-rays"
+date: 2018-06-10
 categories: dental
 ---
 

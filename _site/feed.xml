@@ -1,4 +1,89 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-05-21T18:20:16+10:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Clement Joudet - blog</title><subtitle>Personal blog about machine learning, software and tech.</subtitle><entry><title type="html">Deep learning object detection on dental x-rays</title><link href="http://localhost:4000/dental/2018/06/10/deep-learning-dental-x-ray.html" rel="alternate" type="text/html" title="Deep learning object detection on dental x-rays" /><published>2018-06-10T18:39:56+10:00</published><updated>2018-06-10T18:39:56+10:00</updated><id>http://localhost:4000/dental/2018/06/10/deep-learning-dental-x-ray</id><content type="html" xml:base="http://localhost:4000/dental/2018/06/10/deep-learning-dental-x-ray.html">&lt;p&gt;&lt;img src=&quot;/assets/dental-preview.png&quot; alt=&quot;assets/dental-preview.png&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-05-21T18:48:05+10:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Clement Joudet - blog</title><subtitle>Personal blog about machine learning, software and tech.</subtitle><entry><title type="html">Improving deep learning object detection on dental x-rays</title><link href="http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray.html" rel="alternate" type="text/html" title="Improving deep learning object detection on dental x-rays" /><published>2018-09-06T00:00:00+10:00</published><updated>2018-09-06T00:00:00+10:00</updated><id>http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray</id><content type="html" xml:base="http://localhost:4000/dental/2018/09/06/improving-deep-learning-dental-x-ray.html">&lt;p&gt;This is a follow-up on how I improved the model from my previous post.&lt;/p&gt;
+
+&lt;p&gt;What was wrong:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Precision wasn’t great&lt;/li&gt;
+  &lt;li&gt;MobileNet (SSD) performed better than Faster RCNN ResNet, which seems counter-intuitive as MobileNet is supposed to be a lighter model&lt;/li&gt;
+  &lt;li&gt;Tooth segmentation was not very precise. Often the model would output two teeth as one, and overall you could tell the model wasn’t really precise on the object boxes&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this article I will talk about two solutions I implemented to increase model accuracy:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Image preprocessing&lt;/li&gt;
+  &lt;li&gt;Transfer learning&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;1-preprocessing&quot;&gt;1. Preprocessing&lt;/h2&gt;
+
+&lt;p&gt;Our x-ray dataset comes from various sources, and as you can see below they vary quite a lot. There are variations in image resolution, size, contrast, and zoom on the teeth. That’s because our x-rays come from different machines used by different radiologists.
+Raw input sample&lt;/p&gt;
+
+&lt;p&gt;Image size and resolution variability is not a problem for our model because the images are all very high quality (average size 2900x1400) so it actually downsizes images before processing. Degrees of zoom on the teeth is not a problem either, it actually gives a bit of variety to our model.&lt;/p&gt;
+
+&lt;p&gt;However, gray level and contrast variations can make it hard for our model to really learn the right features.&lt;/p&gt;
+
+&lt;p&gt;A preprocessing step would be to normalize our data to obtain images with similar contrasts and that all “look the same”. Histogram equalization is a good way to increase contrast. But for our data, simple histogram equalization is not good as it can actually reduce the visibility of tooth restorations and implants (see comparison below).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/dental-2-preview.png&quot; alt=&quot;assets/dental-2-preview.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;CLAHE (Contrast Limited Adaptive Histogram Equalization) is a histogram equalization technique that allows to enhance contrast locally while limiting the amplification of noise.&lt;/p&gt;
+
+&lt;p&gt;I used OpenCV, which is an amazing resource for editing images, and can’t recommend it enough. Here is a really nice tutorial on histogram equalization. I was able to simply use CLAHE as follow:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;equalize_clahe_image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;img&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;imread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;clahe&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;createCLAHE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clipLimit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tileGridSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clahe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;img&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cv2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;imwrite&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Empirically, a tile of (16,16) was a good tradeoff for our contrast among all images.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/dental-2-clahe.png&quot; alt=&quot;assets/dental-2-clahe.png&quot; /&gt;
+&lt;em&gt;&lt;center&gt;Comparison of histogram equalization methods&lt;/center&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;2-transfer-learning&quot;&gt;2. Transfer learning&lt;/h2&gt;
+
+&lt;p&gt;Tensorflow Object Detection API makes it easy to do transfer learning from an existing model. The model zoo allows you to pick a pre-trained model and easily train it on your dataset.&lt;/p&gt;
+
+&lt;p&gt;I chose to use faster_rcnn_resnet50_coco for its relatively good speed and mAP score on the COCO dataset.&lt;/p&gt;
+
+&lt;p&gt;After 1500 iterations on my laptop, the model is already performing quite well. I used vertical and horizontal flipping for data augmentation. When comparing with my previous model, we can see how much the current model has improved:
+&lt;img src=&quot;/assets/dental-2-comparison.png&quot; alt=&quot;assets/dental-2-comparison.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Transfer learning helped for two main reasons. First of all, a pre-trained model makes it easy to learn shapes and specific objects. Secondly, the Faster RCNN ResNet50 uses higher image sizes than my previous models, which probably helped the precision. I also had to lower the IoU threshold for non max suppression from the tensorflow config.&lt;/p&gt;
+
+&lt;p&gt;Current model is still not perfect, especially around implants but it is probably because we don’t have a lot of implant examples in our dataset. I haven’t trained it on GPU which limits the total amount of training possible and makes the current model only a prototype. However the jump in precision indicates that the preprocessing and transfer learning are going in the right direction.&lt;/p&gt;
+
+&lt;p&gt;Here are a few more outputs from the current algorithm:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/dental-2-example1.png&quot; alt=&quot;assets/dental-2-example1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/dental-2-example2.png&quot; alt=&quot;assets/dental-2-example2.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/dental-2-example3.png&quot; alt=&quot;assets/dental-2-example3.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/dental-2-example4.png&quot; alt=&quot;assets/dental-2-example4.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Next steps:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Training a lot more, on GPU&lt;/li&gt;
+  &lt;li&gt;Other models (SSD, bigger ResNets…) comparisons&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find the code here: &lt;a href=&quot;https://github.com/clemkoa/tooth-detection&quot;&gt;https://github.com/clemkoa/tooth-detection&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The dataset is not public yet, but we are working on it!&lt;/p&gt;
+
+&lt;p&gt;Disclaimer: all x-rays in the dataset have been anonymized for privacy concerns.&lt;/p&gt;</content><author><name></name></author><summary type="html">This is a follow-up on how I improved the model from my previous post.</summary></entry><entry><title type="html">Deep learning object detection on dental x-rays</title><link href="http://localhost:4000/dental/2018/06/10/deep-learning-dental-x-ray.html" rel="alternate" type="text/html" title="Deep learning object detection on dental x-rays" /><published>2018-06-10T00:00:00+10:00</published><updated>2018-06-10T00:00:00+10:00</updated><id>http://localhost:4000/dental/2018/06/10/deep-learning-dental-x-ray</id><content type="html" xml:base="http://localhost:4000/dental/2018/06/10/deep-learning-dental-x-ray.html">&lt;p&gt;&lt;img src=&quot;/assets/dental-preview.png&quot; alt=&quot;assets/dental-preview.png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;As the interest in AI and deep learning keeps growing, we see more and more practical applications, especially in healthcare where breakthroughs could be revolutionary. I teamed up with Dr Arthur Fourcade, an oral surgeon who made his thesis on CNNs applied to medical imagery. Our first project was to work on panoramic dental x-rays and apply a few models as a proof of concept.&lt;/p&gt;
 

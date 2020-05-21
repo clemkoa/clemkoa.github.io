@@ -1,0 +1,76 @@
+I"�<p>This is a follow-up on how I improved the model from my previous post.</p>
+
+<p>What was wrong:</p>
+
+<ul>
+  <li>Precision wasn’t great</li>
+  <li>MobileNet (SSD) performed better than Faster RCNN ResNet, which seems counter-intuitive as MobileNet is supposed to be a lighter model</li>
+  <li>Tooth segmentation was not very precise. Often the model would output two teeth as one, and overall you could tell the model wasn’t really precise on the object boxes</li>
+</ul>
+
+<p>In this article I will talk about two solutions I implemented to increase model accuracy:</p>
+
+<ul>
+  <li>Image preprocessing</li>
+  <li>Transfer learning</li>
+</ul>
+
+<h2 id="1-preprocessing">1. Preprocessing</h2>
+
+<p>Our x-ray dataset comes from various sources, and as you can see below they vary quite a lot. There are variations in image resolution, size, contrast, and zoom on the teeth. That’s because our x-rays come from different machines used by different radiologists.
+Raw input sample</p>
+
+<p>Image size and resolution variability is not a problem for our model because the images are all very high quality (average size 2900x1400) so it actually downsizes images before processing. Degrees of zoom on the teeth is not a problem either, it actually gives a bit of variety to our model.</p>
+
+<p>However, gray level and contrast variations can make it hard for our model to really learn the right features.</p>
+
+<p>A preprocessing step would be to normalize our data to obtain images with similar contrasts and that all “look the same”. Histogram equalization is a good way to increase contrast. But for our data, simple histogram equalization is not good as it can actually reduce the visibility of tooth restorations and implants (see comparison below).</p>
+
+<p><img src="/assets/dental-2-preview.png" alt="assets/dental-2-preview.png" /></p>
+
+<p>CLAHE (Contrast Limited Adaptive Histogram Equalization) is a histogram equalization technique that allows to enhance contrast locally while limiting the amplification of noise.</p>
+
+<p>I used OpenCV, which is an amazing resource for editing images, and can’t recommend it enough. Here is a really nice tutorial on histogram equalization. I was able to simply use CLAHE as follow:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">equalize_clahe_image</span><span class="p">(</span><span class="n">image_path</span><span class="p">):</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">clahe</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">createCLAHE</span><span class="p">(</span><span class="n">clipLimit</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">tileGridSize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span>
+    <span class="n">cl</span> <span class="o">=</span> <span class="n">clahe</span><span class="p">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="n">cv2</span><span class="p">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cl</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Empirically, a tile of (16,16) was a good tradeoff for our contrast among all images.</p>
+
+<p><img src="/assets/dental-2-comparison.png" alt="assets/dental-2-comparison.png" />
+<em><center>Comparison of histogram equalization methods</center></em></p>
+
+<h2 id="2-transfer-learning">2. Transfer learning</h2>
+
+<p>Tensorflow Object Detection API makes it easy to do transfer learning from an existing model. The model zoo allows you to pick a pre-trained model and easily train it on your dataset.</p>
+
+<p>I chose to use faster_rcnn_resnet50_coco for its relatively good speed and mAP score on the COCO dataset.</p>
+
+<p>After 1500 iterations on my laptop, the model is already performing quite well. I used vertical and horizontal flipping for data augmentation. When comparing with my previous model, we can see how much the current model has improved:</p>
+
+<p>Transfer learning helped for two main reasons. First of all, a pre-trained model makes it easy to learn shapes and specific objects. Secondly, the Faster RCNN ResNet50 uses higher image sizes than my previous models, which probably helped the precision. I also had to lower the IoU threshold for non max suppression from the tensorflow config.</p>
+
+<p>Current model is still not perfect, especially around implants but it is probably because we don’t have a lot of implant examples in our dataset. I haven’t trained it on GPU which limits the total amount of training possible and makes the current model only a prototype. However the jump in precision indicates that the preprocessing and transfer learning are going in the right direction.</p>
+
+<p>Here are a few more outputs from the current algorithm:</p>
+
+<p>Next steps:</p>
+
+<ul>
+  <li>Training a lot more, on GPU</li>
+  <li>Other models (SSD, bigger ResNets…) comparisons</li>
+</ul>
+
+<p>You can find the code here: https://github.com/clemkoa/tooth-detection</p>
+
+<p>The dataset is not public yet, but we are working on it! Disclaimer: all x-rays in the dataset have been anonymized for privacy concerns.</p>
+:ET
