@@ -11,14 +11,17 @@ A feed-forward neural network doesn't have memory. It receives an input and give
 Recurrent neural networks (RNNs) have some kind of memory and show dynamic behaviour. Long Short-Term Memory networks (LSTM), a special type of RNN, are better at remembering long-term dependencies and are the benchmark to beat when it comes to sequences.
 
 A [Neural Turing Machine](https://arxiv.org/abs/1410.5401) (NTM) is a different type of neural networks.
-Like a LSTM, it can process sequences of data. Unlike LSTMs, it has two components: a neural network controller and a memory bank.
+Like a LSTM it can process sequences of data. Unlike LSTMs, it has two components: a neural network controller and a memory bank.
 The controller is free to read and write to its memory.
 All read and write operations are differentiable, which makes it an end-to-end trainable model.
-It learns what to store and what to fetch from its memory table, hence the comparison with Turing machines.
-Because it has access to a memory bank, a NTM needs fewer parameters than a LSTM and can more easily learn some algorithmic tasks.
+It learns what to store and what to fetch from its memory table.
+Because it has access to a memory bank a NTM needs fewer parameters than a LSTM and can more easily learn some algorithmic tasks.
+
+The analogy with Turing machines is made because of the access to memory.
+Even though the network outputs that define read/write operations are called "heads", they are really just layers.
 
 I've wanted to implement NTMs for a while.
-I find the concept of a neural network with memory fascinating, and hope we see more applications in the future.
+I find the concept of a neural network with memory fascinating and hope we see more applications in the future.
 <!-- NTM successors, [Differentiable Neural Computers](https://deepmind.com/blog/article/differentiable-neural-computers), are seeing more real-life applications but today let's talk about the ancestor. -->
 
 I'm happy to release a NTM pytorch implementation I've been working on: [https://github.com/clemkoa/ntm](https://github.com/clemkoa/ntm).
@@ -128,7 +131,7 @@ My mistake was not reading the paper properly, and thinking that $$s_t$$ was the
 So when I didn't find anything that suited me, I implemented my [own version of the circular convolution](https://github.com/clemkoa/ntm/blob/master/ntm/utils.py#L11).
 And it worked, the model converged on the copy task!
 
-But comparing my code to other public repos and reading back the original article, I found out that $$s_t$$ was actually a vector of length 3.
+Comparing my code to other public repos and reading back the original article, I found out that $$s_t$$ was actually a vector of length 3.
 Each element is the degree of shifting by -1, 0 and 1. It turns out that the circular convolution described [here](https://github.com/loudinthecloud/pytorch-ntm/blob/master/ntm/memory.py#L8) is valid.
 I went with this implementation because it allows $$s_t$$ to have a physical sense as well as fewer parameters.
 
@@ -158,7 +161,7 @@ Mean 0 std 1 -->
 
 #### For you
 
-I've uploaded some trained models here: [https://github.com/clemkoa/ntm/tree/master/trained_models](https://github.com/clemkoa/ntm/tree/master/trained_models).
+I've uploaded some trained models [here](https://github.com/clemkoa/ntm/tree/master/trained_models).
 You're welcome to try them by yourself with the library: [https://github.com/clemkoa/ntm](https://github.com/clemkoa/ntm).
 
 #### For me
