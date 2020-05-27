@@ -5,12 +5,12 @@
   {% if page.header-img %}
       <meta property="og:image" content="{{ site.url }}/{{ page.header-img }}" />
   {% endif %}
-  {% if page.header-img %}
-    <meta property="og:description" content="{{ page.subtitle }}" />
-  {% endif %}
   {%- seo -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   {%- feed_meta -%}
+  {% if page.header-img %}
+    <meta property="og:description" content="{{ page.subtitle }}" />
+  {% endif %}
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
     {%- include google-analytics.html -%}
   {%- endif -%}

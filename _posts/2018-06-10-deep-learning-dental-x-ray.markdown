@@ -4,7 +4,7 @@ title: "Deep learning object detection on dental x-rays"
 subtitle: "Detecting tooth, restorations, implants and more on dental x-rays with deep learning."
 date: 2018-06-10
 categories: dental
-header-img: "/assets/images/dental/dental-preview.png"
+header-img: "assets/images/dental/dental-preview.png"
 ---
 
 ![assets/images/dental/dental-preview.png](/assets/images/dental/dental-preview.png)

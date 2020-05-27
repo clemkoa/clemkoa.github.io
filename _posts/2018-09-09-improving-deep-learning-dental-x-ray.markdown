@@ -4,7 +4,7 @@ title: "Improving deep learning object detection on dental x-rays"
 subtitle: "Detecting tooth, restorations, implants and more on dental x-rays with deep learning."
 date: 2018-09-06
 categories: dental
-header-img: "/assets/images/dental/dental-2-example3.png"
+header-img: "assets/images/dental/dental-2-example3.png"
 ---
 
 This is a follow-up on how I improved the model from my previous post.

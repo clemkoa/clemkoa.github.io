@@ -4,7 +4,7 @@ title: "Implementing neural turing machines in pytorch"
 date: 2020-05-27
 categories: paper
 subtitle: "Reproducing results from Neural Turing Machines, a different type of neural network that has access to a memory bank."
-header-img: "/assets/images/ntm/repeat_10_20.png"
+header-img: "assets/images/ntm/repeat_10_20.png"
 ---
 
 A feed-forward neural network doesn't have memory. It receives an input and gives back an output, but it has no way to remember anything by itself.
