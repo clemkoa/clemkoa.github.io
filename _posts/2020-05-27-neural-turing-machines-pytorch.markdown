@@ -135,7 +135,7 @@ I went with this implementation because it allows $$s_t$$ to have a physical sen
 In general, almost every sentence of section 3. of the original article is necessary to fully understand the architecture.
 It is definitely worth spending a few hours reading and re-reading that section before starting any implementation.
 
-#### 3. Adam is safe but RMSProp is better
+#### 3. Adam is safe but RMSProp is better here
 
 When implementing neural nets, I try to follow some [principles/recipe](https://clemkoa.github.io/dental/2019/08/18/neural-network-implementation-principles.html) to keep complexity at a reasonable level.
 Among them was using Adam as the optimiser, especially for RNNs. Andrej Karpathy said [here](https://karpathy.github.io/2019/04/25/recipe/) that Adam is safe in the early stages of setting baselines.
