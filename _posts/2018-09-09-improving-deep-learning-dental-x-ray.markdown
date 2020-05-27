@@ -29,7 +29,7 @@ However, gray level and contrast variations can make it hard for our model to re
 
 A preprocessing step would be to normalize our data to obtain images with similar contrasts and that all “look the same”. Histogram equalization is a good way to increase contrast. But for our data, simple histogram equalization is not good as it can actually reduce the visibility of tooth restorations and implants (see comparison below).
 
-![assets/dental-2-preview.png](/assets/dental-2-preview.png)
+![assets/images/dental/dental-2-preview.png](/assets/images/dental/dental-2-preview.png)
 
 CLAHE (Contrast Limited Adaptive Histogram Equalization) is a histogram equalization technique that allows to enhance contrast locally while limiting the amplification of noise.
 
@@ -45,7 +45,7 @@ def equalize_clahe_image(image_path):
 
 Empirically, a tile of (16,16) was a good tradeoff for our contrast among all images.
 
-![assets/dental-2-clahe.png](/assets/dental-2-clahe.png)
+![assets/images/dental/dental-2-clahe.png](/assets/images/dental/dental-2-clahe.png)
 *<center>Comparison of histogram equalization methods</center>*
 
 ## 2. Transfer learning
@@ -55,7 +55,7 @@ Tensorflow Object Detection API makes it easy to do transfer learning from an ex
 I chose to use faster_rcnn_resnet50_coco for its relatively good speed and mAP score on the COCO dataset.
 
 After 1500 iterations on my laptop, the model is already performing quite well. I used vertical and horizontal flipping for data augmentation. When comparing with my previous model, we can see how much the current model has improved:
-![assets/dental-2-comparison.png](/assets/dental-2-comparison.png)
+![assets/images/dental/dental-2-comparison.png](/assets/images/dental/dental-2-comparison.png)
 
 
 Transfer learning helped for two main reasons. First of all, a pre-trained model makes it easy to learn shapes and specific objects. Secondly, the Faster RCNN ResNet50 uses higher image sizes than my previous models, which probably helped the precision. I also had to lower the IoU threshold for non max suppression from the tensorflow config.
@@ -64,13 +64,13 @@ Current model is still not perfect, especially around implants but it is probabl
 
 Here are a few more outputs from the current algorithm:
 
-![assets/dental-2-example1.png](/assets/dental-2-example1.png)
+![assets/images/dental/dental-2-example1.png](/assets/images/dental/dental-2-example1.png)
 
-![assets/dental-2-example2.png](/assets/dental-2-example2.png)
+![assets/images/dental/dental-2-example2.png](/assets/images/dental/dental-2-example2.png)
 
-![assets/dental-2-example3.png](/assets/dental-2-example3.png)
+![assets/images/dental/dental-2-example3.png](/assets/images/dental/dental-2-example3.png)
 
-![assets/dental-2-example4.png](/assets/dental-2-example4.png)
+![assets/images/dental/dental-2-example4.png](/assets/images/dental/dental-2-example4.png)
 
 Next steps:
 

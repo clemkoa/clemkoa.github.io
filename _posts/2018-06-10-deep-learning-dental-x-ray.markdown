@@ -5,7 +5,7 @@ date: 2018-06-10
 categories: dental
 ---
 
-![assets/dental-preview.png](/assets/dental-preview.png)
+![assets/images/dental/dental-preview.png](/assets/images/dental/dental-preview.png)
 
 As the interest in AI and deep learning keeps growing, we see more and more practical applications, especially in healthcare where breakthroughs could be revolutionary. I teamed up with Dr Arthur Fourcade, an oral surgeon who made his thesis on CNNs applied to medical imagery. Our first project was to work on panoramic dental x-rays and apply a few models as a proof of concept.
 
@@ -29,7 +29,7 @@ Dataset features:
 - Average size of x-ray: 2900 * 1400 px
 - Classes: 933 endodontic, 2331 restorations and 145 implant occurrences. The number of implant occurrences is a bit low and makes it quite hard for the model to detect implants in an evaluation dataset. This can be countered with data augmentation techniques.
 
-![assets/dental-annotation.png](/assets/dental-annotation.png)
+![assets/images/dental/dental-annotation.png](/assets/images/dental/dental-annotation.png)
 *<center>Example of annotations on VoTT</center>*
 
 ## Preprocessing
@@ -55,13 +55,13 @@ Results
 
 Here are some of the result outputs we have so far:
 
-![assets/dental-example1.png](/assets/dental-example1.png)
+![assets/images/dental/dental-example1.png](/assets/images/dental/dental-example1.png)
 
-![assets/dental-example2.png](/assets/dental-example2.png)
+![assets/images/dental/dental-example2.png](/assets/images/dental/dental-example2.png)
 
-![assets/dental-example3.png](/assets/dental-example3.png)
+![assets/images/dental/dental-example3.png](/assets/images/dental/dental-example3.png)
 
-![assets/dental-example4.png](/assets/dental-example4.png)
+![assets/images/dental/dental-example4.png](/assets/images/dental/dental-example4.png)
 
 An example where the model is not working as well as intended
 

@@ -46,7 +46,7 @@ very interesting playground.
 
 #### Mind your transformations
 
-You should be wary of tensor reshaping. It is easy to use a `reshape` instead of a `permute`, and your network won't be able to train properly because you mixed up your data across dimensions. In general, you should be careful about any tensor reshaping!
+You should be wary of tensor reshaping. It is easy to use a `reshape` instead of a `permute`, and your network won't be able to train properly because you mixed up your data across dimensions. In general, you should be careful about any tensor reshaping! The same goes for transposing tensors.
 
 #### Know you dataset
 
