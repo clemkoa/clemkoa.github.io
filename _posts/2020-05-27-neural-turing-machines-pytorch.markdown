@@ -8,17 +8,17 @@ header-img: "assets/images/ntm/memory_during_copy.png"
 ---
 
 A feed-forward neural network doesn't have memory. It receives an input and gives back an output, but it has no way to remember anything by itself.
-Recurrent neural networks (RNNs) have some kind of memory and show dynamic behaviour. Long Short-Term Memory networks (LSTM), a special type of RNN, are better at remembering long-term dependencies and are the benchmark to beat when it comes to sequences.
+Recurrent neural networks (RNNs) have some kind of memory and show dynamic behaviour.
+Long Short-Term Memory networks (LSTM) - a special type of RNN - are better at remembering long-term dependencies and are the benchmark to beat when it comes to sequences.
 
-A [Neural Turing Machine](https://arxiv.org/abs/1410.5401) (NTM) is a different type of neural networks.
+A [Neural Turing Machine](https://arxiv.org/abs/1410.5401) (NTM) is a different type of neural network, introduced in Graves *et al* (2014).
 Like a LSTM it can process sequences of data. Unlike LSTMs, it has two components: a neural network controller and a memory bank.
 The controller is free to read and write to its memory.
 All read and write operations are differentiable, which makes it an end-to-end trainable model.
 It learns what to store and what to fetch from its memory table.
-Because it has access to a memory bank a NTM needs fewer parameters than a LSTM and can more easily learn some algorithmic tasks.
 
-The analogy with Turing machines is made because of the access to memory.
-Even though the network outputs that define read/write operations are called "heads", they are really just layers.
+Why is this cool? Because it has access to a memory bank, a NTM needs fewer parameters than a LSTM and can more easily learn some algorithmic tasks.
+It trains faster and better.
 
 I've wanted to implement NTMs for a while.
 I find the concept of a neural network with memory fascinating and hope we see more applications in the future.
@@ -27,7 +27,10 @@ I find the concept of a neural network with memory fascinating and hope we see m
 I'm happy to release a NTM pytorch implementation I've been working on: [https://github.com/clemkoa/ntm](https://github.com/clemkoa/ntm).
 
 ![NTM architecture](/assets/images/ntm/ntm-architecture.png)
-*<center>Overview of the NTM architecture</center>*
+*<center>Overview of the NTM architecture from the original paper</center>*
+
+The analogy with Turing machines is made because of the access to memory.
+Even though the network outputs that define read/write operations are called "heads", they are just regular neural layers.
 
 I made my own implementation for two reasons:
 - reproducibility: the results in the paper are quite interesting, and I wanted to see if I could reproduce them myself
