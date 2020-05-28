@@ -44,13 +44,13 @@ The syntax and APIs are amazing, and it's pretty fast. The only thing I have aga
 
 I was able to reproduce the authors' results on a set of tasks using the same experimental parameters they described.
 
-#### 1. Copy
+### 1. Copy
 
 The copy task tests whether NTM can store and recall a long sequence of arbitrary information.
 The network is presented with an input sequence of random binary vectors followed by a delimiter flag. The target sequence is a copy of the input sequence. To ensure that there isn't any assistance, no inputs are presented to the model while it receives the targets.
 
 On this task, the model trains very well on sequences between 1 and 20 in length.
-A LSTM controller gives the best results and seems to always converge perfectly within 50k iterations.
+A LSTM controller gives the best results and seems to always converge perfectly within 50k sequences.
 
 ![Loss curve during training](/assets/images/ntm/loss_copy_batch8_seed1.png)
 *<center>Loss curve during training for a batch size of 8.</center>*
@@ -66,14 +66,32 @@ Here is the net output compared to the target for a sequence of 100. Note that t
 
 Here is the same sequence for a model trained on a different random seed: 20k iterations, batch size of 4 and seed of 1. Only the first vector has a slight issue.
 
-![Loss curve during training](/assets/images/ntm/copy_100_2.png)
+![Copy task output comparison](/assets/images/ntm/copy_100_2.png)
 
 It is surprising how well the model can generalise the task at hand, at a relatively low cost.
 There are only 67,000 parameters and the model reaches a loss of 0 very fast.
 
-The authors were not able to reach a good output with a LSTM-only model, even when it had ~20 times the amount of parameters of the NTM (67k vs 1.35M parameters).
+The following image shows the memory use during the copy task.
 
-#### 2. Copy repeat
+![NTM memory during copy task](/assets/images/ntm/memory_during_copy.png)
+
+Top row are input and target.
+You can then see the writing vector (middle left) as well as the read vector (middle right).
+On the bottom row is the weight vector from write and read heads. Only a subset of memory locations are shown.
+
+Note the sharp focus of the weightings: purple is 0, yellow is 1.
+The fact that the focus moves at every steps shows the network's use of shifts for location-based addressing.
+We also note that the read vector is constant before the delimiter vector.
+The network knows not to read before it's asked to give back the sequence.
+
+So how does the NTM compare with LSTM on this task? The authors were not able to reach a good output with a LSTM-only model, even when it had ~20 times the amount of parameters of the NTM (67k vs 1.35M parameters). We see on the image below that the number of correct vectors decreases with the length of the sequence.
+
+![LSTM output comparison](/assets/images/ntm/lstm_copy.png)
+
+This proves that NTMs are better suited than LSTMs for the copy task.
+They require less parameters and are able to generalise better.
+
+### 2. Copy repeat
 
 The copy repeat task is all about imitating a for-loop.
 As stated in the paper, "the repeat copy task extends copy by requiring the network to output the copied sequence a specified number of times and then emit an end-of-sequence marker."
@@ -108,12 +126,12 @@ If you're unfamiliar with that problem, you can experience some of it here: [htt
 
 As explained in Collier *et al.* (2018), the initialisation of memory, read heads and write heads is a prime factor of convergence.
 Some NTM implementations on github initialise the memory read to a random vector, which seems counter-intuitive.
-It will make the network learn that random initialisation, making its task harder.
+It will make the network's task harder by having to learn that random initialisation.
 Instead I initialise the memory read to a constant vector of small value ($$10^{-6}$$).
 
 Initialising the state of read heads and write heads at the start of each sequence is another important step.
 It's actually best to make it a learnt parameter of the model.
-This way, the model will learn to optimise the head weights at the beginning of each sequence.
+This way the model will learn to optimise the head weights at the beginning of each sequence.
 
 Without this initialisation scheme, I noticed that the network did not always converge depending on the random seed.
 
@@ -126,8 +144,8 @@ Here is the equation described in the paper, expressed as a circular convolution
 
 $$ w_t(i) = \sum_{j=0}^{N-1} w_t^g(j)s_t(i-j) $$
 
-As soon as I saw that, I went to look for a circular convolution implementation in pytorch.
-My mistake was not reading the paper properly, and thinking that $$s_t$$ was the same shape as $$w_t^g$$.
+As soon as I saw that I went to look for a circular convolution implementation in pytorch.
+My mistake was not reading the paper properly and thinking that $$s_t$$ was the same shape as $$w_t^g$$.
 So when I didn't find anything that suited me, I implemented my [own version of the circular convolution](https://github.com/clemkoa/ntm/blob/master/ntm/utils.py#L11).
 And it worked, the model converged on the copy task!
 
