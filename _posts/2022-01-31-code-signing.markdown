@@ -7,7 +7,7 @@ categories: software
 header-img: ""
 ---
 
-I had to sign an electron package recently and got confused by the different artefacts required to sign some code.
+I had to sign an electron package recently and got confused by the different artefacts required to sign some files.
 I found out that there was little explanation about the process and it was hard to deeply understand why I needed to do some steps that I was doing.
 
 So I'm writing this post in order to give some explanation about the process and what each artefact contains.
@@ -69,7 +69,7 @@ You can do that directly on your machine or on some specific hardware like [HSMs
 The important part is that your private key is never shared with anyone else and that it is kept in a safe environment.
 
 The trick about issuing certificates is that you should never give your private key to anyone, including the Certificate Authority.
-CAs work with Certificate Signing Requests (CSR). It's a message sent by the applicant to the regristration authory.
+CAs work with [Certificate Signing Requests (CSR)](https://en.wikipedia.org/wiki/Certificate_signing_request). It's a message sent by the applicant to the regristration authory.
 It contains:
 - the public key for which the certificate should be issued
 - identifying information (domain name, organisation name, email address etc...)
@@ -79,6 +79,7 @@ The CA will ask you to prove you are who you say you are at registration, usuall
 Once you have your CSR, you send it to the CA and get a certificate back. 
 The certificate is a .crt file that contains a digital signature from the CA, identifying information, the public key you sent in the CSR and other information like validity period, id, etc...
 
+The certificate does not contain your private key, only the public one. So it's safe to share - and it is actually shared when signing files so that people can verify the signature.
 You can then use your private key and this certificate to sign files and distribute them!
 
 ## Conclusion
