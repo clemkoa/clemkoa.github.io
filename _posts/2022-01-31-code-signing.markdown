@@ -53,7 +53,7 @@ How to verify a signature:
 3. With the public key in the certificate, decrypt the signed hash that was bundled with the files
 4. Check both hashes are equal
 
-On top of that a timestamp is added during signing so that the signature stays valid even if the certificate has expired since the signature.
+On top of that a timestamp is added during signing so that the signature stays valid even if the certificate has expired since the signature. See [Appendix 1](#appendix1) for more information on trusted timestamping.
 
 ![Digital signature verification](/assets/images/code_signing/Private_key_signing.svg){:style="width:300px;display:block; margin-left:auto; margin-right:auto;"}
 <center>Alice signs a message by adding the encrypted hash to the message. Bob verifies it with Alice's public key.</center><br/>
@@ -69,7 +69,7 @@ You can do that directly on your machine or on some specific hardware like [HSMs
 The important part is that your private key is never shared with anyone else and that it is kept in a safe environment.
 
 The trick about issuing certificates is that you should never give your private key to anyone, including the Certificate Authority.
-CAs work with [Certificate Signing Requests (CSR)](https://en.wikipedia.org/wiki/Certificate_signing_request). It's a message sent by the applicant to the regristration authory.
+CAs work with [Certificate Signing Requests (CSR)](https://en.wikipedia.org/wiki/Certificate_signing_request). It's a message sent by the applicant to the registration authority.
 It contains:
 - the public key for which the certificate should be issued
 - identifying information (domain name, organisation name, email address etc...)
@@ -89,3 +89,21 @@ As you have seen, this relies heavily on the Public Key Infrastructure and the C
 It's also a bit different to how encryption like [TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security#Algorithms) works but that's a topic for next time. 
 
 In the meantime we can appreciate that code signing is a pretty smart process that keeps things simple for users who install packages coming from anywhere on the web!
+
+<br/>
+<br/>
+
+{: #appendix1 }
+## Appendix: Trusted Timestamping
+
+Timestamping the signature is an interesting problem. 
+It's not as simple as just manually entering a timestamp because it could be tempered with during the signature process. Nothing would prevent you from setting the timestamp as the date from 4 years ago for instance.
+
+We need a way to verify the signed timestamp.
+For this, digital signatures rely on Timestamping Authorities through timestamp servers.
+Timestamp servers will get your digital signature and sign the timestamp on top of it (see image).
+
+![Trusted timestamping](/assets/images/code_signing/Trusted_timestamping.svg)
+
+Timestamping is basically applying another signature from a public and trusted authority on top of yours.
+Thanks to this any application can check that the timestamp can be trusted, and can trust your package even if the certificate has expired (if it was signed before the expiry of course).
