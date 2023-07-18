@@ -28,9 +28,8 @@ github_username: clemkoa
 google_analytics: "G-TEXW7J1NZT"
 
 # Build settings
-remote_theme: jekyll/minima
+theme: minima
 plugins:
-  - jekyll-remote-theme
   - jekyll-feed
 
 # Exclude from processing.
