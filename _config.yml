@@ -28,10 +28,9 @@ github_username: clemkoa
 google_analytics: "G-TEXW7J1NZT"
 
 # Build settings
-remote_theme: jekyll/minima
+theme: minima
 plugins:
   - jekyll-feed
-  - jekyll-remote-theme
 
 # Exclude from processing.
 # The following items will not be processed, by default.
