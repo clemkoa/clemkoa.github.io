@@ -7,7 +7,7 @@ categories: software
 header-img: ""
 ---
 
-An explanation of the implementation of attention in Transformers.
+An explanation of the implementation of attention in Transformers as described in ["Attention is all you need" by Vaswani et al](https://arxiv.org/abs/1706.03762).
 
 ## Introduction
 
@@ -50,12 +50,12 @@ For the sake of example, let's say we have an embedding space of dimension 4. Ou
 #### 1. Query, Key and Value.
 
 The sequence of embedding vectors is split into 3 processing paths, that we call Query (`Q`), Key (`K`) and Values (`V`).
-Each vector, like $$ x_1 $$, produces 3 vectors:
+Each embedding vector, like $$ x_1 $$, produces 3 vectors:
 
 ![assets/images/attention/q1k1v1.png](/assets/images/attention/q1k1v1.png)
 *<center>Figure 2. Query, Key and Value vectors for one word.</center>*
 
-Note that the dimensions of $$ q_1 $$ and $$ k_1 $$ don't have to be the same as the embedding dimension. The dimension of $$ v_1 $$ has to be the dimension of the output that you want, but we'll come back to that later. I kept them all to 4 here (same as embeddings) to simplify things.
+Note that the dimensions of $$ q_1 $$ and $$ k_1 $$ have to be the same - we call it $$d_k$$ - because of dot product, but it doesn't have to be the same as the embedding dimension. The dimension $$d_v$$ of $$ v_1 $$ has to be the dimension of the output, but we'll come back to that later. For the sake of simplicity, all dimensions are kept to 4 here, same as the embeddings.
 
 ![assets/images/attention/qkv.png](/assets/images/attention/qkv.png){: width="250" style="display:block; margin-left:auto; margin-right:auto" }
 *<center>Figure 3. Q, K and V as matrices.</center>*
@@ -76,6 +76,8 @@ Dot-product is used to obtain similarity between `K` and `Q`. For vector $$x_1$$
 
 $$ s_{1,2} = q_1 \cdot k_2$$
 
+$$s_{1,2}$$ is a scalar.
+
 Which we can write with matrix multiplication using *transpose* as:
 
 $$ \text{similarity} = Q K^T \\ $$
@@ -83,12 +85,13 @@ $$ \text{similarity} = Q K^T \\ $$
 ![assets/images/attention/similarity1.png](/assets/images/attention/similarity1.png){: width="500" style="display:block; margin-left:auto; margin-right:auto" }
 *<center>Figure 4. Using matrix multiplication and transpose to parallelise dot-product.</center>*
 
+The use of matrix multiplication and transpose for the dot-product operation is why the Scaled Dot-Product Attention is a type of multiplicative attention.
 
 We then normalise the similarity:
 
 $$\text{normalised_similarity} = \frac{Q K^T}{\sqrt{d_k}}  $$
 
-where $$d_k$$ is the dimension of key and query vectors - 4 here. We scale the matrix by the square root of $$d_k$$ before softmax in order to prevent one-hot-like vectors. If you have a vector with high variance, softmax will produce vectors that are very sharp and close to one-hot. As stated in the paper,
+where $$d_k$$ is the dimension of key and query vectors. We scale the matrix by the square root of $$d_k$$ before softmax in order to prevent one-hot-like vectors. If you have a vector with high variance, softmax will produce vectors that are very sharp and close to one-hot. As stated in the paper:
 > We suspect that for large values of $$d_k$$, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients
 
 #### 3. Attention weights
@@ -117,7 +120,7 @@ And that's how attention works in transformers!
 ## Self-attention
 
 We usually call *self-attention* attention where K, Q and V are all computed from the same embeddings (same input).
-Self-attention is used in text generation models, like ChatGPT, where the model uses the current text to generate the next token.
+Self-attention is used in text generation models, like ChatGPT, where the model uses the current sequence to generate the next token.
 
 ![assets/images/attention/self-attention.png](/assets/images/attention/self-attention.png){: width="400" style="display:block; margin-left:auto; margin-right:auto" }
 *<center>Figure 6. Self-attention.</center>*
@@ -139,7 +142,7 @@ Cross attention is used in translation tasks, where K and Q come from the input 
 Multi-head attention is a concept that is orthogonal to self-attention or cross-attention - it can be used in both cases.
 In multi-head attention, we parallelise attention so that each head focuses on different aspects of the inputs relationship, allowing the model to capture diverse information from different perspectives. In the paper, authors say:
 
-> We found it beneficial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv -dimensional output values. These are concatenated and once again projected, resulting in the final values
+> We found it beneficial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values. These are concatenated and once again projected, resulting in the final values
 
 ![assets/images/attention/multi-head-attention.png](/assets/images/attention/multi-head-attention.png){: width="250" style="display:block; margin-left:auto; 
 margin-right:auto" }
