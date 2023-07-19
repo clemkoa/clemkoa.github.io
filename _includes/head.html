@@ -1,9 +1,20 @@
 <head>
+  {%- if jekyll.environment == 'production' -%}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TEXW7J1NZT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TEXW7J1NZT');
+    </script>
+  {%- endif -%}
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% if page.header-img %}
-      <meta property="og:image" content="{{ site.url }}/{{ page.header-img }}" />
+    <meta property="og:image" content="{{ site.url }}/{{ page.header-img }}" />
   {% endif %}
   {%- seo -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
@@ -11,7 +22,4 @@
   {% if page.header-img %}
     <meta property="og:description" content="{{ page.subtitle }}" />
   {% endif %}
-  {%- if jekyll.environment == 'production' -%}
-    {%- include google-analytics.html -%}
-  {%- endif -%}
 </head>
