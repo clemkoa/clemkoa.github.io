@@ -152,8 +152,8 @@ margin-right:auto" }
 
 - [Attention is all you need](https://arxiv.org/pdf/1706.03762.pdf) by Vaswani et al.
 - Andrej Karpathy's brilliant explanation and implementation of transformers in his video on youtube: [https://www.youtube.com/watch?v=kCc8FmEb1nY](https://www.youtube.com/watch?v=kCc8FmEb1nY)
-- [https://stats.stackexchange.com/questions/421935/what-exactly-are-keys-queries-and-values-in-attention-mechanisms](https://stats.stackexchange.com/questions/421935/what-exactly-are-keys-queries-and-values-in-attention-mechanisms)
-- [https://en.wikipedia.org/wiki/Attention_(machine_learning)](https://en.wikipedia.org/wiki/Attention_(machine_learning))
+- [StackExchange post 421935](https://stats.stackexchange.com/questions/421935/what-exactly-are-keys-queries-and-values-in-attention-mechanisms)
+- [Wikipedia Attention_(machine_learning)](https://en.wikipedia.org/wiki/Attention_(machine_learning))
 
 <!-- -----------------------
 
